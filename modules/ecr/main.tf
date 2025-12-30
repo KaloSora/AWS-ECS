@@ -5,7 +5,8 @@ resource "aws_ecr_repository" "ecr_repo" {
 
   # Set immutable for PROD
   image_tag_mutability = each.key == "prod" ? "IMMUTABLE" : "MUTABLE"
-
+  
+  # Enable image scanning on push, enhanced scanning is required for this setting
   image_scanning_configuration {
     scan_on_push = true
   }
@@ -82,3 +83,18 @@ resource "aws_ecr_repository_policy" "ecr_repo_policy" {
     ]
   })
 }
+
+# ECR image scan
+# Remember to Enable AWS Inspector V2 from console before enhanced scanning
+# resource "aws_ecr_registry_scanning_configuration" "ecr_enhanced_scanning" {
+
+#   scan_type = "ENHANCED"
+
+#   rule {
+#     scan_frequency = "CONTINUOUS_SCAN"
+#     repository_filter {
+#       filter      = "*" # For all repositories
+#       filter_type = "WILDCARD"
+#     }
+#   }
+# }
