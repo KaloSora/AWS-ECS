@@ -51,3 +51,9 @@ aws ecr describe-images \
     --repository-name $REPO_NAME \
     --region $REGION
 ```
+
+5. Create ECS
+```
+terraform apply -target=module.ecs_fargate -var-file="aws-ecs.tfvars"
+terraform destroy -target=module.ecs_fargate -var-file="aws-ecs.tfvars"
+```
