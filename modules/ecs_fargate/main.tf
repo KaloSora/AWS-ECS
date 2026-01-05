@@ -132,6 +132,48 @@ resource "aws_vpc_endpoint" "s3" {
   }
 }
 
+resource "aws_vpc_endpoint" "logs" {
+  vpc_id              = var.aws_vpc_id
+  service_name        = "com.amazonaws.${var.aws_region}.logs"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true  # Enable DNS
+
+  subnet_ids          = var.aws_subnet_id
+  security_group_ids  = [aws_security_group.alb_sg.id]
+
+  tags = {
+    Name = "${var.app}-logs-endpoint"
+  }
+}
+
+resource "aws_vpc_endpoint" "ssm" {
+  vpc_id              = var.aws_vpc_id
+  service_name        = "com.amazonaws.${var.aws_region}.ssm"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true  # Enable DNS
+
+  subnet_ids          = var.aws_subnet_id
+  security_group_ids  = [aws_security_group.alb_sg.id]
+
+  tags = {
+    Name = "${var.app}-ssm-endpoint"
+  }
+}
+
+resource "aws_vpc_endpoint" "secretsmanager" {
+  vpc_id              = var.aws_vpc_id
+  service_name        = "com.amazonaws.${var.aws_region}.secretsmanager"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true  # Enable DNS
+
+  subnet_ids          = var.aws_subnet_id
+  security_group_ids  = [aws_security_group.alb_sg.id]
+
+  tags = {
+    Name = "${var.app}-secretsmanager-endpoint"
+  }
+}
+
 ### Create for ECS Fargate Resources
 # ECS Cluster
 resource "aws_ecs_cluster" "ecs_cluster" {
